@@ -1,20 +1,83 @@
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+<?php 
 session_start();
 
-require 'koneksi.php';
+require "koneksi.php";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-        $_SESSION['warga'] = $_POST['warga'];
-        $_SESSION['alamat']= $_POST['alamat'];
-        $_SESSION['nomer']= $_POST['nomer'];
-        $_SESSION['jumlah']= $_POST['jumlah'];
-        header("Location: input.php");
-    exit;
+$sql = "SELECT SUM(jumlah) AS total_jumlah FROM data WHERE status = '1'";
+$ccc = mysqli_query($conn, $sql);
+
+if ($ccc) {
+    $total = mysqli_fetch_array($ccc);
+    if ($total['total_jumlah'] !== null) {
+        $muzaki = number_format($total['total_jumlah']);
+    } else {
+        echo "Data tidak tersedia";
+    }
+} else {
+    echo "Query gagal dieksekusi: " . mysqli_error($conn);
 }
+
+$sql = "SELECT SUM(total) AS total_beras FROM data WHERE jenis = 'beras' AND status = '1' ";
+$sss = mysqli_query($conn, $sql);
+if ($sss) {
+    $total = mysqli_fetch_array($sss);
+    if ($total['total_beras'] !== null) {
+        $beras = number_format($total['total_beras']);
+    } else {
+        echo "Data tidak tersedia";
+    }
+} else {
+    echo "Query gagal dieksekusi: " . mysqli_error($conn);
+}
+
+$sql = "SELECT SUM(total) AS total_uang FROM data WHERE jenis = 'uang' AND status = '1' ";
+$aaa = mysqli_query($conn, $sql);
+if ($aaa) {
+    $total = mysqli_fetch_array($aaa);
+    if ($total['total_uang'] !== null) {
+        $uang = number_format($total['total_uang']);
+    } else {
+        echo "Data tidak tersedia";
+    }
+} else {
+    echo "Query gagal dieksekusi: " . mysqli_error($conn);
+}
+
+
+if (isset($_POST['takmir'])) {
+    header('location: pass.php');
+
+}
+
+if (isset($_POST['user'])) {
+    header('location: main.php');
+
+}
+
+$sql = "SELECT * FROM data WHERE warga = 'RT10' AND status = '1'";
+$rt10_query = mysqli_query($conn, $sql);
+$jumlah_rt10 = mysqli_num_rows($rt10_query);
+
+
+$sql = "SELECT * FROM data WHERE warga = 'RT11' AND status = '1'";
+$rt11_query = mysqli_query($conn, $sql);
+$jumlah_rt11 = mysqli_num_rows($rt11_query);
+
+
+$sql = "SELECT * FROM data WHERE warga = 'RT14' AND status = '1'";
+$rt14_query = mysqli_query($conn, $sql);
+$jumlah_rt14 = mysqli_num_rows($rt14_query);
+
+
+$sql = "SELECT * FROM data WHERE warga = 'RT15' AND status = '1'";
+$rt15_query = mysqli_query($conn, $sql);
+$jumlah_rt15 = mysqli_num_rows($rt15_query);
+
+
+$sql = "SELECT * FROM data WHERE warga = 'RT16' AND status = '1'";
+$rt16_query = mysqli_query($conn, $sql);
+$jumlah_rt16 = mysqli_num_rows($rt16_query);
+
 ?>
 
 <!DOCTYPE html>
@@ -22,109 +85,152 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakat Warga</title>
+    <title>Document</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Red+Rose:wght@300&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-    h2{
-        display: flex;
-        justify-content: center;
-        color: black;
-        width: 100%;
+body {
+    background-color: aliceblue;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+.total {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.total {
+    align-items: center; /* Menengahkan item di dalam total */
+}
+
+.m, .b, .u, .rt {
+    width: 200px;
+    border: 1px solid black;
+    padding: 5px 6px;
+    margin-bottom: 10px;
+}
+
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: rgb(0, 99, 212);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+table{
+    border-collapse: collapse;
     }
 
-    h3{
-        display: flex;
-        margin-left: 15%;
-        color: black;
+    th, td{
+        border: 1px solid black;
+        padding: 5px;
+        text-align: center;
     }
 
-    body {    
-        background-color: aliceblue;
-        font-family: 'Poppins', sans-serif;
-        padding-top: 100px;
-      }
+@media screen and (max-width: 600px) {
+    .total {
+        flex-direction: column;
+        align-items: center;
+    }
 
-      form {
-        margin-left: 15%;
-        width: 70%;
-        color: black;
-        padding-bottom: 60px;
-      }
+    .total {
+        margin-bottom: 20px; 
+    }
 
-      label {
-        margin-top: 20px;
-      }
-    
-      
-      input[type="text"]
-       {
-        width: 70%;
+    .m, .b, .u, .rt {
+        width: 80%;
+    }
+
+    .container {
         padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-sizing: border-box;
-      }
+    }
 
 
-      input[type="submit"] {
-        width: 30%;
-        padding: 10px;
-        margin-top: 20px;
-        background-color: rgb(0, 99, 212); 
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-          }
-
-      input[type="submit"]:hover {
-        opacity: 50%;
-      }
-
+}
 
     </style>
 </head>
 <body>
 
-    <h2>Penerimaan Zakat<br>Masjid As-Salam</h2>
+<div class="container">
+    <div class="total">
+        <div class="muzakki">
+            <h2>total muzakki</h2>
+            <div class="m">
+                <?php echo $muzaki ?>
+            </div>
+        </div>
 
-    <h3>Data muzakki :</h3>
+        <div class="beras">
+            <h2>total beras</h2>
+            <div class="b">
+                <?php echo $beras ?>
+            </div>
+        </div>
 
-    <form method="post" action="" enctype="multipart/form-data">
+        <div class="uang">
+            <h2>total uang</h2>
+            <div class="u">
+                <?php echo $uang ?>
+            </div>
+        </div>
+    </div>
 
-        <label for="warga">Warga :</label>
-    <select name='warga'>
-		<option value='RT10'>RT 10</option>
-		<option value='RT11'>RT 11</option>
-        <option value='RT14'>RT 14</option>
-		<option value='RT15'>RT 15</option>
-		<option value='RT16'>RT 16</option>
-     </select><br><br>
 
-        
-        <label for="jumlah">Jumlah Orang :</label>
-    <select name='jumlah'>
-		<option value='1'>1</option>
-		<option value='2'>2</option>
-        <option value='3'>3</option>
-		<option value='4'>4</option>
-		<option value='5'>5</option>
-        <option value='6'>6</option>
-        <option value='7'>7</option>
-        <option value='8'>8</option>
-        <option value='9'>9</option>
-        <option value='10'>10</option>
-	  </select><br><br>
+    <table>
+        <tr>
+            <th>warga</th>
+            <th>total muzakki</th>
+        </tr>
+        <tr>
+            <td>rt10</td>
+            <td><?php echo $jumlah_rt10 ?></td>
+        </tr>
+        <tr>
+            <td>rt11</td>
+            <td><?php echo $jumlah_rt11 ?></td>
+        </tr>
+        <tr>
+            <td>rt14</td>
+            <td><?php echo $jumlah_rt14 ?></td>
+        </tr>
+        <tr>
+            <td>rt15</td>
+            <td><?php echo $jumlah_rt15 ?></td>
+        </tr>
+        <tr>
+            <td>rt16</td>
+            <td><?php echo $jumlah_rt16 ?></td>
+        </tr>
+    </table>
 
-        Alamat: <input type="text" name="alamat"><br><br>
-
-        No. Wa: <input type="text" name="nomer"><br><br>
-
-        <input type="submit" value="next">
+    <form method="post">
+        <input type="submit" value="takmir" name="takmir">
+        <input type="submit" value="muzakki" name="user">
     </form>
+</div>
+
 </body>
 </html>

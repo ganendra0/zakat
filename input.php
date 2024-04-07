@@ -1,3 +1,4 @@
+
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -7,50 +8,28 @@ session_start();
 require 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Simpan data dari form ke dalam variabel
-    $nama = $_POST['nama'];
-    $warga = $_SESSION['warga'];
-    $alamat = $_SESSION['alamat'];
-    $nomer = $_SESSION['nomer'];
-    $kategori = $_POST['kategori'];
-    $jenis = $_POST['jenis'];
-    $jumlah = $_SESSION['jumlah'];
-    $total = $_POST['total'];
-    $gambar = $_FILES['gambar']['name'];
-    $temp = $_FILES['gambar']['tmp_name'];
-    $targetDir = "../zakat/gambar/";
-
-    if (move_uploaded_file($temp, $targetDir . $gambar)) {
-        // Loop untuk menyimpan setiap nama yang dimasukkan
-        for ($i = 0; $i < count($nama); $i++) {
-            $currentNama = $nama[$i];
-            $query = "INSERT INTO data (nama, warga, alamat, nomer, kategori, jenis, jumlah, total, gambar) 
-                        VALUES ('$currentNama', '$warga', '$alamat', '$nomer', '$kategori', '$jenis', '$jumlah', '$total', '$gambar')";
-            
-            if (mysqli_query($conn, $query)) {
-                echo "<script>
-                      alert('Data berhasil ditambahkan.');
-                      window.location.href = 'input.php';
-                      </script>";
-            } else {
-                echo "<script>
-                      alert('Terjadi kesalahan. Data gagal ditambahkan.');
-                      window.location.href = 'input.php';
-                      </script>";
-            }
-        }
-    } else {
-        echo "<script>
-              alert('Gagal mengunggah file gambar.');
-              window.location.href = 'input.php';
-              </script>";
-    }
+    $_SESSION['warga'];
+    $_SESSION['alamat'];
+    $_SESSION['nomer'];
+    $_SESSION['jumlah'];
+    $_SESSION['nama'] = $_POST['nama'];
+    $_SESSION['kategori']= $_POST['kategori'];
+    $_SESSION['jenis']= $_POST['jenis'];
+    $_SESSION['total']= $_POST['total'];
+    if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+      include 'compress.php';
+      $namagambar = $_FILES['gambar']['name'];
+      $gambar = uploadAndResize($namagambar, 'gambar','../zakat/gambar/' , 512);
+      $_SESSION['gambar']= $gambar;
+  }
+    header("Location: cek.php");
+    exit;
+  
 } 
 
-// Jumlah orang yang telah dipilih sebelumnya
 $jml = $_SESSION['jumlah'];
 ?>
-`
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -148,7 +127,6 @@ $jml = $_SESSION['jumlah'];
     </style>
 </head>
 <body>
-    <a href="data.php">lihat data</a>
 
     <h2>Penerimaan Zakat<br>Masjid As-Salam</h2>
 
@@ -164,7 +142,7 @@ $jml = $_SESSION['jumlah'];
         <select name='kategori'>
 		<option value='fitrah'>Zakat Fitrah</option>
 		<option value='mal'>Zakat Mal</option>
-        <option value='infaq'>Infaq</option>
+        <option value='fidyah'>Fidyah</option>
 	  </select><br><br>
 
         <label>Jenis :</label>
@@ -174,10 +152,11 @@ $jml = $_SESSION['jumlah'];
         <label for="uang">Uang</label> <br><br>
 
 
-      Total : <input type="text" name="total">
+      Total (masukkan angka saja) : <input type="text" name="total">
       <br><br>
 
-      Gambar: <input type="file" name="gambar"><br><br>
+      <label for="gambar">Upload Gambar:</label>
+    <input type="file" id="gambar" name="gambar" accept="image/*">
 
         <input type="submit" value="simpan">
     </form>
