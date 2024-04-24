@@ -179,21 +179,21 @@ table{
         <div class="muzakki">
             <h2>total muzakki</h2>
             <div class="m">
-                <?php echo $muzaki ?>
+                <?php echo $muzaki . " orang" ?>
             </div>
         </div>
 
         <div class="beras">
             <h2>total beras</h2>
             <div class="b">
-                <?php echo $beras ?>
+                <?php echo $beras . " kg" ?>
             </div>
         </div>
 
         <div class="uang">
             <h2>total uang</h2>
             <div class="u">
-                <?php echo $uang ?>
+                <?php echo "Rp. " . $uang ?>
             </div>
         </div>
     </div>

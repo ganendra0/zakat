@@ -64,7 +64,8 @@ if ($aaa) {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            width: 170%;
+            width: 100%;
+            height: 100%;
         }
 
         .navbar {
@@ -284,7 +285,14 @@ if ($aaa) {
 <div class="tombol">
 
     <div class="isi">
-        <a href="main.php">isi data</a>
+        <?php
+        if ($_SESSION['admin']) {
+            echo "<a href='main.php'>isi data</a>";
+        }
+        else {
+            echo "<a href='destroy.php'>isi data</a>"; 
+        }
+        ?>
     </div>
 
     <div class="kembali">

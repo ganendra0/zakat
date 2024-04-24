@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -5,7 +6,8 @@ session_start();
 require 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+  
+  $_SESSION['tanggal'] = $_POST['tanggal'];
   $_SESSION['warga'] = $_POST['warga'];
   $_SESSION['alamat'] = $_POST['alamat'];
   $_SESSION['nomer'] = $_POST['nomer'];
@@ -97,6 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <form method="post" action="" enctype="multipart/form-data">
 
+    Tanggal: <input type="date" name="tanggal"><br><br>
+
         <label for="warga">Warga :</label>
     <select name='warga'>
 		<option value='RT10'>RT 10</option>
@@ -121,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <option value='10'>10</option>
 	  </select><br><br>
 
-        Alamat: <input type="text" name="alamat"><br><br>
+        Alamat: <input type="text" name="alamat" require><br><br>
 
         No. Wa: <input type="text" name="nomer"><br><br>
 

@@ -1,4 +1,5 @@
 
+
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -8,6 +9,7 @@ session_start();
 require 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['tanggal'];  
     $_SESSION['warga'];
     $_SESSION['alamat'];
     $_SESSION['nomer'];

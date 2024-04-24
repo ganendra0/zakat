@@ -12,7 +12,6 @@ $jum = $_SESSION['jumlah'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Simpan data dari form ke dalam variabel
-    $tanggal = $_SESSION['tanggal'];
     $warga =  $_SESSION['warga'];
     $alamat = $_SESSION['alamat'];
     $nomer = $_SESSION['nomer'];
@@ -28,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         for ($i = 0; $i < count($nama); $i++) {
             $currentNama = $nama[$i];
-            $query = "INSERT INTO data (tanggal, nama, warga, alamat, nomer, kategori, jenis, jumlah, total, gambar) 
-                        VALUES ('$tanggal' ,'$currentNama', '$warga', '$alamat', '$nomer', '$kategori', '$jenis', '$jumlah', '$total', '$gambar')";
+            $query = "INSERT INTO data (nama, warga, alamat, nomer, kategori, jenis, jumlah, total, gambar) 
+                        VALUES ('$currentNama', '$warga', '$alamat', '$nomer', '$kategori', '$jenis', '$jumlah', '$total', '$gambar')";
             
             if (mysqli_query($conn, $query)) {
                 echo "<script>
@@ -146,7 +145,6 @@ $jml = $_SESSION['jumlah'];
 
 <table>
     <tr>
-        <th>Tanggal</th>
         <th>Nama</th>
         <th>Warga</th>
         <th>Alamat</th>
@@ -164,7 +162,6 @@ $jml = $_SESSION['jumlah'];
         $currentNama = $nama[$i];
         
             echo "<tr>";
-            echo "<td>" . $_SESSION['tanggal'] . "</td>";
             echo "<td>" . $currentNama . "</td>";
             echo "<td>" . $_SESSION['warga'] . "</td>";
             echo "<td>" . $_SESSION['alamat'] . "</td>";
@@ -185,3 +182,4 @@ $jml = $_SESSION['jumlah'];
 
         
     </body>
+

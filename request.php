@@ -14,7 +14,7 @@ $ccc = mysqli_query($conn, $sql);
 
 if ($ccc) {
     $total = mysqli_fetch_array($ccc);
-    if ($total['total_jumlah'] !== null) {
+    if ($total['total_jumlah'] !== null) { 
         $muzaki = number_format($total['total_jumlah']);
     } else {
         $muzaki = "Data tidak tersedia";
